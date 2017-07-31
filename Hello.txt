@@ -1,0 +1,125 @@
+1900-1-1
+
+2099-1-1
+
+
+   public List<detectionDelegation> SearchPaymentList(SearchPayment condition)
+        {
+            List<detectionDelegation> resultList = new List<detectionDelegation>();
+            try
+            {
+                DateTime dt_max= DateTime.Parse("2099-1-1");
+                DateTime dt_min=DateTime.Parse("1900-1-1");
+                bool flag = false;
+               
+                if ((condition.maxDate == dt_max) || (condition.minDate == dt_min))
+                {
+                    flag = true;
+                }
+                if(flag==true)    //当未选择付款日期时
+                {
+                     var result = from InstDev in dataContext.detectionDelegation
+                             where (
+                                  (InstDev.valid == true || InstDev.valid == null)//作废数据(只显示true和null情况) 
+                                 && (condition.DelegateNum.Equals(string.Empty) || InstDev.DelNum.Contains(condition.DelegateNum)) //若仪器编号不为空，加入模糊条件对委托单号判断  
+                                 && (condition.PayMode.Equals(string.Empty) || InstDev.payMode.Contains(condition.PayMode)) //若购买者不为空，付费方式
+                                 && (condition.CustomerType.Equals(string.Empty) || InstDev.customerType.Contains(condition.CustomerType))   //企业类型
+                                 && (condition.DelPayState.Equals(string.Empty) || InstDev.delPayState.Contains(condition.DelPayState))      //缴费状态
+                                 )
+                            // orderby InstDev.payDate descending
+                             //按处置日期降序排序
+                             select InstDev;
+                     if (result.Count() > 0)
+                     {
+                         foreach (var de in result)
+                         {
+                             resultList.Add(de);
+                         }
+                     }
+                   
+                }
+                else                //当选择了付款日期时
+                {
+                    var result = from InstDev in dataContext.detectionDelegation
+                                 where (
+                                      ((InstDev.payDate.Value <= condition.maxDate.Value) && (InstDev.payDate.Value >= condition.minDate.Value))//结束购买时间
+                                     &&(InstDev.valid == true || InstDev.valid == null)//作废数据(只显示true和null情况) 
+                                     && (condition.DelegateNum.Equals(string.Empty) || InstDev.DelNum.Contains(condition.DelegateNum)) //若仪器编号不为空，加入模糊条件对委托单号判断  
+                                     && (condition.PayMode.Equals(string.Empty) || InstDev.payMode.Contains(condition.PayMode)) //若购买者不为空，付费方式
+                                     && (condition.CustomerType.Equals(string.Empty) || InstDev.customerType.Contains(condition.CustomerType))   //企业类型
+                                     && (condition.DelPayState.Equals(string.Empty) || InstDev.delPayState.Contains(condition.DelPayState))      //缴费状态
+                                     )
+                                 orderby InstDev.payDate descending
+                                 //按处置日期降序排序
+                                 select InstDev;
+                    if (result.Count() > 0)
+                    {
+                        foreach (var de in result)
+                        {
+                            resultList.Add(de);
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                throw err;
+            }
+                return resultList;
+        }
+
+李丽
+
+13457652456
+
+
+  public detectionDelegation GetPaymentById(int Id)
+
+
+
+2
+$ git config --global user.name "yunyiming"
+$ git config --global user.email 2485156918@qq.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
