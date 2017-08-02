@@ -1,6 +1,4 @@
-1900-1-1
 
-2099-1-1
 
 
    public List<detectionDelegation> SearchPaymentList(SearchPayment condition)
